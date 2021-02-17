@@ -12,8 +12,8 @@ const jsonHandler = require('./jsonResponses');
 
 const urlStruct = {
   '/random-joke': jsonHandler.getRandomJokeResponse,
-  notFound: htmlHandler.get404Response
-}
+  notFound: htmlHandler.get404Response,
+};
 
 // 3 - locally this will be 3000, on Heroku it will be assigned
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
@@ -29,7 +29,7 @@ const onRequest = (request, response) => {
   // console.log('pathname=', pathname);
 
   if (urlStruct[pathname]) {
-    urlStruct[pathName](request, response);
+    urlStruct[pathname](request, response);
   } else {
     urlStruct.notFound(request, response);
   }
