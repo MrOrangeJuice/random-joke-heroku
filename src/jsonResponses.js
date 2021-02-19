@@ -43,19 +43,26 @@ const jokes = [
 
 // 6 - this will return a random number no bigger than `max`, as a string
 // we will also doing our query parameter validation here
-const getRandomJoke = () => {
+const getRandomJoke = (limit = 1) => {
+  let limit2 = Number(limit);
+  limit2 = !limit2 ? 1 : limit2;
+  limit2 = limit2 < 1 ? 1 : limit2;
+  let number = 0;
   const max = 10;
-  const number = Math.floor(Math.random() * max);
-  const responseObj = {
-    question: jokes[number].q,
-    answer: jokes[number].a,
-  };
+  const responseObj = [];
+  for (let i = 0; i < limit2; i += 1) {
+    number = Math.floor(Math.random() * max);
+    responseObj.push({
+      question: jokes[number].q,
+      answer: jokes[number].a,
+    });
+  }
   return JSON.stringify(responseObj);
 };
 
-const getRandomJokeResponse = (request, response) => {
+const getRandomJokeResponse = (request, response, params) => {
   response.writeHead(200, { 'Content-Type': 'application/json' });
-  response.write(getRandomJoke());
+  response.write(getRandomJoke(params.limit));
   response.end();
 };
 

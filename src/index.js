@@ -5,13 +5,14 @@ const http = require('http');
 
 // 2 - pull in URL and query modules (for URL parsing)
 const url = require('url');
-// const query = require('querystring');
+const query = require('querystring');
 
 const htmlHandler = require('./htmlResponses');
 const jsonHandler = require('./jsonResponses');
 
 const urlStruct = {
   '/random-joke': jsonHandler.getRandomJokeResponse,
+  '/random-jokes': jsonHandler.getRandomJokeResponse,
   notFound: htmlHandler.get404Response,
 };
 
@@ -28,10 +29,13 @@ const onRequest = (request, response) => {
   // console.log('parsedUrl=', parsedUrl);
   // console.log('pathname=', pathname);
 
+  const params = query.parse(parsedUrl.query);
+  // const { limit } = params;
+
   if (urlStruct[pathname]) {
-    urlStruct[pathname](request, response);
+    urlStruct[pathname](request, response, params);
   } else {
-    urlStruct.notFound(request, response);
+    urlStruct.notFound(request, response, params);
   }
 };
 
