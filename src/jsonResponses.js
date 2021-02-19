@@ -43,7 +43,7 @@ const jokes = [
 
 // 6 - this will return a random number no bigger than `max`, as a string
 // we will also doing our query parameter validation here
-const getRandomJoke = (limit = 5) => {
+const getRandomJoke = (limit = 1) => {
   let limit2 = Number(limit);
   limit2 = !limit2 ? 1 : limit2;
   limit2 = limit2 < 1 ? 1 : limit2;
