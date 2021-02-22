@@ -41,9 +41,15 @@ const jokes = [
   },
 ];
 
+const getRandomJokeResponse = (request, response, params, acceptedTypes, type) => {
+  response.writeHead(200, { 'Content-Type': type });
+  response.write(getRandomJoke(params.limit, request, response, acceptedTypes));
+  response.end();
+};
+
 // 6 - this will return a random number no bigger than `max`, as a string
 // we will also doing our query parameter validation here
-const getRandomJoke = (limit = 1) => {
+const getRandomJoke = (limit = 1, request, response, acceptedTypes) => {
   let limit2 = Number(limit);
   limit2 = !limit2 ? 1 : limit2;
   limit2 = limit2 < 1 ? 1 : limit2;
@@ -57,13 +63,22 @@ const getRandomJoke = (limit = 1) => {
       answer: jokes[number].a,
     });
   }
-  return JSON.stringify(responseObj);
-};
+  if (acceptedTypes.includes('text/xml')) {
+    let responseXML = '<jokes>';
+    for (let i = 0; i < limit2; i += 1) {
+      number = Math.floor(Math.random() * max);
+      responseXML += `
+      <joke>
+        <q>${jokes[number].q}</q>
+        <a>${jokes[number].a}</a>
+      </joke>
+      `;
+    }
+    responseXML += '</jokes>';
+    return getRandomJokeResponse(request, response, responseXML, acceptedTypes, 'text/xml'); // bail out
+  }
 
-const getRandomJokeResponse = (request, response, params) => {
-  response.writeHead(200, { 'Content-Type': 'application/json' });
-  response.write(getRandomJoke(params.limit));
-  response.end();
+  return getRandomJokeResponse(request, response, JSON.stringify(responseObj), acceptedTypes, 'application/json');
 };
 
 module.exports.getRandomJokeResponse = getRandomJokeResponse;

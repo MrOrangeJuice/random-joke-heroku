@@ -8,7 +8,7 @@ const url = require('url');
 const query = require('querystring');
 
 const htmlHandler = require('./htmlResponses');
-const jsonHandler = require('./jsonResponses');
+const jsonHandler = require('./responses');
 
 const urlStruct = {
   '/random-joke': jsonHandler.getRandomJokeResponse,
@@ -24,6 +24,9 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 // note that in this course we'll be using arrow functions 100% of the time in our server-side code
 const onRequest = (request, response) => {
   // console.log(request.headers);
+  let acceptedTypes = request.headers.accept && request.headers.accept.split(',');
+  acceptedTypes = acceptedTypes || [];
+
   const parsedUrl = url.parse(request.url);
   const { pathname } = parsedUrl;
   // console.log('parsedUrl=', parsedUrl);
@@ -33,9 +36,9 @@ const onRequest = (request, response) => {
   // const { limit } = params;
 
   if (urlStruct[pathname]) {
-    urlStruct[pathname](request, response, params);
+    urlStruct[pathname](request, response, params, acceptedTypes);
   } else {
-    urlStruct.notFound(request, response, params);
+    urlStruct.notFound(request, response, params, acceptedTypes);
   }
 };
 
