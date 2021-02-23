@@ -27,6 +27,8 @@ const onRequest = (request, response) => {
   let acceptedTypes = request.headers.accept && request.headers.accept.split(',');
   acceptedTypes = acceptedTypes || [];
 
+  const httpMethod = request.method;
+
   const parsedUrl = url.parse(request.url);
   const { pathname } = parsedUrl;
   // console.log('parsedUrl=', parsedUrl);
@@ -36,9 +38,9 @@ const onRequest = (request, response) => {
   // const { limit } = params;
 
   if (urlStruct[pathname]) {
-    urlStruct[pathname](request, response, params, acceptedTypes);
+    urlStruct[pathname](request, response, params, acceptedTypes, httpMethod);
   } else {
-    urlStruct.notFound(request, response, params, acceptedTypes);
+    urlStruct.notFound(request, response, params, acceptedTypes, httpMethod);
   }
 };
 
