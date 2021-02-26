@@ -13,6 +13,7 @@ const jsonHandler = require('./responses');
 const urlStruct = {
   '/random-joke': jsonHandler.getRandomJokeResponse,
   '/random-jokes': jsonHandler.getRandomJokeResponse,
+  '/joke-client': htmlHandler.getJokeClient,
   notFound: htmlHandler.get404Response,
 };
 

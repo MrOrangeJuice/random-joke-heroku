@@ -9,7 +9,7 @@
     "start": "node ./src/index.js",
     "nodemon": "nodemon ./src/index.js -e js,html,css",
     "chromeinspect": "echo \"Now in DEBUG mode. Head to 'chrome://inspect'\";node --inspect ./src/index.js",
-    "kill3000" : "npx kill-port 3000"
+    "kill3000": "npx kill-port 3000"
   },
   "keywords": [],
   "author": "",
